@@ -1,19 +1,26 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <string.h>
 #include <iostream>
+#include <stdio.h>
 using namespace std;
 
-int main()
-{
+int main(){
+
+
+    int x = 0;
+    int y = 0;
+    char ch;
+
+
   ifstream fichier("Lab.txt");
 
 
 
 
 
- if(fichier)
-    {
+ if(fichier){
       //L'ouverture s'est bien passée, on peut donc lire
 
 
@@ -22,9 +29,7 @@ int main()
 
 
 
-    int x = 0;
-     int y = 0;
-     char ch;
+
 
 
 
@@ -37,40 +42,53 @@ int main()
         y = y + 1;
      }
 
-
-
     while (fin >> noskipws >> ch)
      {
        x = x+1;
      }
 
 
-
-    x = x/y;
-     cout << x << endl;
-     cout << y << endl;
-
+     x /=y;
+     cout << "x=" << x << endl;
+     cout << "y=" << y << endl;
 
 
-   int matrice[x][y] = {};
+     ifstream fichier1("Lab.txt");
+
+
+     fstream fin1("Lab.txt", fstream::in);
+
+
+    char matrice[x][y] = {""};
+
+    int i=0;
+    int j=0;
+    while (fin1 >> noskipws >> ch) {
+        strcpy(&matrice[i][j], &ch);
+        cout<<matrice[i][j];
+        i+=1;
+        if(i==x){
+              j=j+1;
+              i=0;
+        }
 
 
 
-   for (int i=0; i <= y; i++)
-    {
-      for (int j=0; j <= x; j++)
-      {
-        cout << matrice[i][j] << endl;
-      }
+
+
     }
-    }
 
 
 
- else
-    {
+
+
+}
+
+
+
+ else{
       cout << "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
-    }
+}
 
 
 
