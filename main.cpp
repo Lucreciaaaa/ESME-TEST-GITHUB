@@ -14,7 +14,7 @@ int main(){
     char ch;
 
 
-  ifstream fichier("Lab.txt");
+  ifstream fichier("Lab.txt");  // ouverture du fichier (contenant le labyrinthe) en mode lecture
 
 
 
@@ -33,7 +33,7 @@ int main(){
 
 
 
-    fstream fin("Lab.txt", fstream::in);
+    fstream fin("Lab.txt", fstream::in);  // Ouverture du même fichier en mode lecture et écriture
 
 
 
@@ -49,8 +49,8 @@ int main(){
 
 
      x /=y;
-     cout << "x=" << x << endl;
-     cout << "y=" << y << endl;
+     cout << "x=" << x << endl;    // x représente le nombre de colonnes
+     cout << "y=" << y << endl;    // y représente le nombre de lignes
 
 
      ifstream fichier1("Lab.txt");
@@ -59,28 +59,32 @@ int main(){
      fstream fin1("Lab.txt", fstream::in);
 
 
-    char matrice[x][y] = {""};
+    char matrice[x][y] = {""};     // tableau de y lignes et x colonnes contenant des caractères
 
     int i=0;
     int j=0;
-    while (fin1 >> noskipws >> ch) {
-        strcpy(&matrice[i][j], &ch);
-        cout<<matrice[i][j];
-        i+=1;
-        if(i==x){
+    while (fin1 >> noskipws >> ch) {  // QUE FAIT L'OPERATEUR NOSKIPWS ?
+
+//cout<<matrice[i][j];
+printf("%c : %d\n", ch, ch);
+        if(ch == 10){
               j=j+1;
               i=0;
+
+        } else {
+            //printf("%c : %d\n", ch, ch);
+            matrice[i][j] = ch;
+            i+=1;
         }
 
-
-
-
-
     }
-
-
-
-
+    matrice[0][1]='.';
+for(i=0;i<=x;i++){
+    for(j=0;j<=y;j++){
+            printf("%c", matrice[i][j]);
+        }
+        printf("\n");
+    }
 
 }
 
@@ -93,5 +97,4 @@ int main(){
 
 
  return 0;
-}
-
+ }
