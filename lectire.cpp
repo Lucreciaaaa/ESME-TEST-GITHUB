@@ -8,14 +8,29 @@
 #include <time.h>
 using namespace std;
 
-int main(){
-    cout<<"The A-Maze-Ing Maze \n";
-    cout<<"\n";
+int main()
+{
+    cout<<"          _      ______   _               ____   ____  _____         _______ ____ _____ _____  ______            \n";
+    cout<<"         | |    |  ____| | |        /\\   |  _ \\ / __ \\|  __ \\     /\\|__   __/ __ \\_   _|  __ \\|  ____|    \n";
+    cout<<"         | |    | |__    | |       /  \\  | |_) | |  | | |__) |   /  \\  | | | |  | || | | |__) | |__            \n";
+    cout<<"         | |    |  __|   | |      / /\\ \\ |  _ <| |  | |  _  /   / /\\ \\ | | | |  | || | |  _  /|  __|         \n";
+    cout<<"         | |____| |____  | |____ / ____ \\| |_) | |__| | | \\ \\  / ____ \\| | | |__| || |_| | \\ \\| |____      \n";
+    cout<<"         |______|______|_|______/_/   _\\_\\____/_\\____/|_|  \\_\\/_/____\\_\\_| _\\____/_____|_|  \\_\\______| \n";
+    cout<<"                     |  __ \\|  ____| |  \\/  |/ __ \\|  __ \\|  _ \\_   _| |  | |/ ____|                        \n";
+    cout<<"                     | |  | | |__    | \\  / | |  | | |__) | |_) || | | |  | | (___                              \n";
+    cout<<"                     | |  | |  __|   | |\\/| | |  | |  _  /|  _ < | | | |  | |\\___ \\                           \n";
+    cout<<"                     | |__| | |____  | |  | | |__| | | \\ \\| |_) || |_| |__| |____) |                           \n";
+    cout<<"                     |_____/|______| |_|  |_|\\____/|_|  \\_\\____/_____|\\____/|_____/                          \n";
+    cout<<"\n\n\n\n\n\n";
+    cout<<"                              BIENVENUE DANS LE LABORATOIRE DE MORBIUS !!!                                     \n\n";
+    cout<<"VOUS ALLEZ PARCOURIR PLUSIEURS LABYRINTHE AFIN DE VOUS ENFUIR DU LABORATOIRE DE MORBIUS LE SCIENTIFIQUE FOU!!!";
+    getch();
+
     int x = 0;
     int y = 0;
     char ch;
 
-  ifstream fichier("Lab.txt");  //ouverture du fichier (contenant le labyrinthe) en mode lecture
+    ifstream fichier("Lab.txt");  //ouverture du fichier (contenant le labyrinthe) en mode lecture
 
  if(fichier)
     {
@@ -47,6 +62,11 @@ int main(){
 
     int i=0;
     int j=0;
+    int iE=0;
+    int jE=0;
+
+    //Création de la matrice qui sera le plateau de jeu
+    //(servira pour les divers modifications et déplacements du personnage)
     while (fin1 >> noskipws >> ch)
     {
         if(i == x)
@@ -57,6 +77,8 @@ int main(){
         else if(ch == 'E')
         {
             matrice[i][j] = '.';
+            iE = i;
+            jE = j;
             i+=1;
         }
         else
@@ -67,14 +89,13 @@ int main(){
 
     }
 
-    bool Victoire = FALSE;
-    int a=1;
-    int b=0;
-    char gauche = matrice[a][b-1]; //q        z
-    char droite = matrice[a][b+1]; //d      q s d
-    char haut = matrice[a-1][b];   //z
-    char bas = matrice[a+1][b];    //s
+    bool victoire = FALSE;
+    int p=0;
 
+    //Première Impression de la map
+    system("cls");
+    cout<<"LE LABORATOIRE DE MORBIUS\n";
+    cout<<"THE A-MAZE-ING MAZE\n\n";
     for ( int i = 0; i < y; i++ )
     {
         for ( int j = 0; j < x; j++ )
@@ -84,20 +105,98 @@ int main(){
     printf("\n");
     }
 
+    //Lancement de la boucle du jeu
     while(victoire == FALSE)
     {
+        char pos;
 
-    matrice[a][b]=' ';
-        if(gauche==' ' || droite==' ' || haut==' ' || bas==' '){
-            char pos;
-            char z;
-            char s;
-            char q;
-            char d;
+        pos = getch();
+        if(pos=='z')
+        {
+            jE-=1;
+            if(matrice[iE][jE] == ' ')
+            {
+                matrice[iE][jE+1]=' ';
+                matrice[iE][jE]='.';
+            }
+            else if(matrice[iE][jE] == '#')
+            {
+                jE+=1;
+            }
+            else if(matrice[iE][jE] == 'S')
+            {
+                matrice[iE][jE+1]=' ';
+                matrice[iE][jE]='.';
+                victoire = TRUE;
+            }
+        }
+        if(pos=='s')
+        {
+            jE+=1;
+            if(matrice[iE][jE] == ' ')
+            {
+                matrice[iE][jE-1]=' ';
+                matrice[iE][jE]='.';
+            }
+            else if(matrice[iE][jE] == '#')
+            {
+                jE-=1;
+            }
+            else if(matrice[iE][jE] == 'S')
+            {
+                matrice[iE][jE-1]=' ';
+                matrice[iE][jE]='.';
+                victoire = TRUE;
+            }
+        }
+        if(pos=='q')
+        {
+            iE-=1;
+            if(matrice[iE][jE] == ' ')
+            {
+                matrice[iE+1][jE]=' ';
+                matrice[iE][jE]='.';
+            }
+            else if(matrice[iE][jE] == '#')
+            {
+                iE+=1;
+            }
+            else if(matrice[iE][jE] == 'S')
+            {
+                matrice[iE+1][jE]=' ';
+                matrice[iE][jE]='.';
+                victoire = TRUE;
+            }
+        }
+        if(pos=='d')
+        {
+            iE+=1;
+            if(matrice[iE][jE] == ' ')
+            {
+                matrice[iE-1][jE]=' ';
+                matrice[iE][jE]='.';
+            }
+            else if(matrice[iE][jE] == '#')
+            {
+                iE-=1;
+            }
+            else if(matrice[iE][jE] == 'S')
+            {
+                matrice[iE-1][jE]=' ';
+                matrice[iE][jE]='.';
+                victoire = TRUE;
+            }
+        }
 
-        else printf("Je rentre pas dans le if \n");
+        else
+        {
+            printf("Une erreur est apparue dans le programme \n");
+        }
 
+        //Imprime la map avec les modifications
         system("cls");
+        cout<<"LE LABORATOIRE DE MORBIUS\n";
+        cout<<"THE A-MAZE-ING MAZE\n\n";
         for ( int i = 0; i < y; i++ )
         {
             for ( int j = 0; j < x; j++ )
@@ -106,11 +205,29 @@ int main(){
             }
         printf("\n");
         }
-
-        p=p+1;
-
     }
-}
+    system("cls");
+    cout<<"          _      ______   _               ____   ____  _____         _______ ____ _____ _____  ______            \n";
+    cout<<"         | |    |  ____| | |        /\\   |  _ \\ / __ \\|  __ \\     /\\|__   __/ __ \\_   _|  __ \\|  ____|    \n";
+    cout<<"         | |    | |__    | |       /  \\  | |_) | |  | | |__) |   /  \\  | | | |  | || | | |__) | |__            \n";
+    cout<<"         | |    |  __|   | |      / /\\ \\ |  _ <| |  | |  _  /   / /\\ \\ | | | |  | || | |  _  /|  __|         \n";
+    cout<<"         | |____| |____  | |____ / ____ \\| |_) | |__| | | \\ \\  / ____ \\| | | |__| || |_| | \\ \\| |____      \n";
+    cout<<"         |______|______|_|______/_/   _\\_\\____/_\\____/|_|  \\_\\/_/____\\_\\_| _\\____/_____|_|  \\_\\______| \n";
+    cout<<"                     |  __ \\|  ____| |  \\/  |/ __ \\|  __ \\|  _ \\_   _| |  | |/ ____|                        \n";
+    cout<<"                     | |  | | |__    | \\  / | |  | | |__) | |_) || | | |  | | (___                              \n";
+    cout<<"                     | |  | |  __|   | |\\/| | |  | |  _  /|  _ < | | | |  | |\\___ \\                           \n";
+    cout<<"                     | |__| | |____  | |  | | |__| | | \\ \\| |_) || |_| |__| |____) |                           \n";
+    cout<<"                     |_____/|______| |_|  |_|\\____/|_|  \\_\\____/_____|\\____/|_____/                          \n";
+    cout<<"\n\n\n\n\n\n";
+    cout<<"                              VOUS AVEZ REUSSI A PARCOURIR LE LABYRINTHE                                         \n";
+    cout<<"                            VOULEZ VOUS VOUS RENDRE AU PROCHAIN NIVEAU ? Y/N                                    \n";
+    char choix;
+    choix = getch();
+    if(choix == 'y')
+    {
+        printf("Nop pas encore");
+    }
+    }
     else
     {
         cout << "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
