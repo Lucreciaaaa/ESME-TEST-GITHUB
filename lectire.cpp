@@ -8,29 +8,13 @@
 #include <time.h>
 using namespace std;
 
-int main()
+int plateau(string nom_fichier)
 {
-    cout<<"          _      ______   _               ____   ____  _____         _______ ____ _____ _____  ______            \n";
-    cout<<"         | |    |  ____| | |        /\\   |  _ \\ / __ \\|  __ \\     /\\|__   __/ __ \\_   _|  __ \\|  ____|    \n";
-    cout<<"         | |    | |__    | |       /  \\  | |_) | |  | | |__) |   /  \\  | | | |  | || | | |__) | |__            \n";
-    cout<<"         | |    |  __|   | |      / /\\ \\ |  _ <| |  | |  _  /   / /\\ \\ | | | |  | || | |  _  /|  __|         \n";
-    cout<<"         | |____| |____  | |____ / ____ \\| |_) | |__| | | \\ \\  / ____ \\| | | |__| || |_| | \\ \\| |____      \n";
-    cout<<"         |______|______|_|______/_/   _\\_\\____/_\\____/|_|  \\_\\/_/____\\_\\_| _\\____/_____|_|  \\_\\______| \n";
-    cout<<"                     |  __ \\|  ____| |  \\/  |/ __ \\|  __ \\|  _ \\_   _| |  | |/ ____|                        \n";
-    cout<<"                     | |  | | |__    | \\  / | |  | | |__) | |_) || | | |  | | (___                              \n";
-    cout<<"                     | |  | |  __|   | |\\/| | |  | |  _  /|  _ < | | | |  | |\\___ \\                           \n";
-    cout<<"                     | |__| | |____  | |  | | |__| | | \\ \\| |_) || |_| |__| |____) |                           \n";
-    cout<<"                     |_____/|______| |_|  |_|\\____/|_|  \\_\\____/_____|\\____/|_____/                          \n";
-    cout<<"\n\n\n\n\n\n";
-    cout<<"                              BIENVENUE DANS LE LABORATOIRE DE MORBIUS !!!                                     \n\n";
-    cout<<"VOUS ALLEZ PARCOURIR PLUSIEURS LABYRINTHE AFIN DE VOUS ENFUIR DU LABORATOIRE DE MORBIUS LE SCIENTIFIQUE FOU!!!";
-    getch();
-
     int x = 0;
     int y = 0;
     char ch;
 
-    ifstream fichier("Lab.txt");  //ouverture du fichier (contenant le labyrinthe) en mode lecture
+    ifstream fichier(nom_fichier);  //ouverture du fichier (contenant le labyrinthe) en mode lecture
 
  if(fichier)
     {
@@ -38,7 +22,7 @@ int main()
 
     string ligne; //Une variable pour stocker les lignes lues
 
-    fstream fin("Lab.txt", fstream::in);  //Ouverture du même fichier en mode lecture et écriture
+    fstream fin(nom_fichier, fstream::in);  //Ouverture du même fichier en mode lecture et écriture
 
     while(getline(fichier, ligne)) //Tant qu'on n'est pas à la fin, on lit
      {
@@ -54,9 +38,9 @@ int main()
      //cout << "x=" << x << endl;    // x représente le nombre de colonnes
      //cout << "y=" << y << endl;    // y représente le nombre de lignes
 
-     ifstream fichier1("Lab.txt");
+     ifstream fichier1(nom_fichier);
 
-     fstream fin1("Lab.txt", fstream::in);
+     fstream fin1(nom_fichier, fstream::in);
 
     char matrice[x][y] = {""};     // tableau de y lignes et x colonnes contenant des caractères
 
@@ -64,6 +48,8 @@ int main()
     int j=0;
     int iE=0;
     int jE=0;
+    int iEperm=0;
+    int jEperm=0;
 
     //Création de la matrice qui sera le plateau de jeu
     //(servira pour les divers modifications et déplacements du personnage)
@@ -79,6 +65,8 @@ int main()
             matrice[i][j] = '.';
             iE = i;
             jE = j;
+            iEperm = i;
+            jEperm = j;
             i+=1;
         }
         else
@@ -129,6 +117,13 @@ int main()
                 matrice[iE][jE]='.';
                 victoire = TRUE;
             }
+            else if(matrice[iE][jE] == 'X')
+            {
+                matrice[iE][jE+1]=' ';
+                iE = iEperm;
+                jE = jEperm;
+                matrice[iE][jE]='.';
+            }
         }
         if(pos=='s')
         {
@@ -147,6 +142,13 @@ int main()
                 matrice[iE][jE-1]=' ';
                 matrice[iE][jE]='.';
                 victoire = TRUE;
+            }
+            else if(matrice[iE][jE] == 'X')
+            {
+                matrice[iE][jE-1]=' ';
+                iE = iEperm;
+                jE = jEperm;
+                matrice[iE][jE]='.';
             }
         }
         if(pos=='q')
@@ -167,6 +169,13 @@ int main()
                 matrice[iE][jE]='.';
                 victoire = TRUE;
             }
+            else if(matrice[iE][jE] == 'X')
+            {
+                matrice[iE+1][jE]=' ';
+                iE = iEperm;
+                jE = jEperm;
+                matrice[iE][jE]='.';
+            }
         }
         if(pos=='d')
         {
@@ -186,12 +195,19 @@ int main()
                 matrice[iE][jE]='.';
                 victoire = TRUE;
             }
+            else if(matrice[iE][jE] == 'X')
+            {
+                matrice[iE-1][jE]=' ';
+                iE = iEperm;
+                jE = jEperm;
+                matrice[iE][jE]='.';
+            }
         }
 
-        else
+        /*else
         {
             printf("Une erreur est apparue dans le programme \n");
-        }
+        }*/
 
         //Imprime la map avec les modifications
         system("cls");
@@ -207,6 +223,34 @@ int main()
         }
     }
     system("cls");
+    }
+    else
+    {
+        cout << "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
+    }
+    return 0;
+}
+
+int main()
+{
+    cout<<"          _      ______   _               ____   ____  _____         _______ ____ _____ _____  ______            \n";
+    cout<<"         | |    |  ____| | |        /\\   |  _ \\ / __ \\|  __ \\     /\\|__   __/ __ \\_   _|  __ \\|  ____|    \n";
+    cout<<"         | |    | |__    | |       /  \\  | |_) | |  | | |__) |   /  \\  | | | |  | || | | |__) | |__            \n";
+    cout<<"         | |    |  __|   | |      / /\\ \\ |  _ <| |  | |  _  /   / /\\ \\ | | | |  | || | |  _  /|  __|         \n";
+    cout<<"         | |____| |____  | |____ / ____ \\| |_) | |__| | | \\ \\  / ____ \\| | | |__| || |_| | \\ \\| |____      \n";
+    cout<<"         |______|______|_|______/_/   _\\_\\____/_\\____/|_|  \\_\\/_/____\\_\\_| _\\____/_____|_|  \\_\\______| \n";
+    cout<<"                     |  __ \\|  ____| |  \\/  |/ __ \\|  __ \\|  _ \\_   _| |  | |/ ____|                        \n";
+    cout<<"                     | |  | | |__    | \\  / | |  | | |__) | |_) || | | |  | | (___                              \n";
+    cout<<"                     | |  | |  __|   | |\\/| | |  | |  _  /|  _ < | | | |  | |\\___ \\                           \n";
+    cout<<"                     | |__| | |____  | |  | | |__| | | \\ \\| |_) || |_| |__| |____) |                           \n";
+    cout<<"                     |_____/|______| |_|  |_|\\____/|_|  \\_\\____/_____|\\____/|_____/                          \n";
+    cout<<"\n\n\n\n\n\n";
+    cout<<"                              BIENVENUE DANS LE LABORATOIRE DE MORBIUS !!!                                     \n\n";
+    cout<<"VOUS ALLEZ PARCOURIR PLUSIEURS LABYRINTHES AFIN DE VOUS ENFUIR DU LABORATOIRE DE MORBIUS LE SCIENTIFIQUE FOU!!!";
+    getch();
+
+    plateau("Lab.txt");
+
     cout<<"          _      ______   _               ____   ____  _____         _______ ____ _____ _____  ______            \n";
     cout<<"         | |    |  ____| | |        /\\   |  _ \\ / __ \\|  __ \\     /\\|__   __/ __ \\_   _|  __ \\|  ____|    \n";
     cout<<"         | |    | |__    | |       /  \\  | |_) | |  | | |__) |   /  \\  | | | |  | || | | |__) | |__            \n";
@@ -225,12 +269,27 @@ int main()
     choix = getch();
     if(choix == 'y')
     {
-        printf("Nop pas encore");
+        plateau("Barb.txt");
+
+        cout<<"          _      ______   _               ____   ____  _____         _______ ____ _____ _____  ______            \n";
+        cout<<"         | |    |  ____| | |        /\\   |  _ \\ / __ \\|  __ \\     /\\|__   __/ __ \\_   _|  __ \\|  ____|    \n";
+        cout<<"         | |    | |__    | |       /  \\  | |_) | |  | | |__) |   /  \\  | | | |  | || | | |__) | |__            \n";
+        cout<<"         | |    |  __|   | |      / /\\ \\ |  _ <| |  | |  _  /   / /\\ \\ | | | |  | || | |  _  /|  __|         \n";
+        cout<<"         | |____| |____  | |____ / ____ \\| |_) | |__| | | \\ \\  / ____ \\| | | |__| || |_| | \\ \\| |____      \n";
+        cout<<"         |______|______|_|______/_/   _\\_\\____/_\\____/|_|  \\_\\/_/____\\_\\_| _\\____/_____|_|  \\_\\______| \n";
+        cout<<"                     |  __ \\|  ____| |  \\/  |/ __ \\|  __ \\|  _ \\_   _| |  | |/ ____|                        \n";
+        cout<<"                     | |  | | |__    | \\  / | |  | | |__) | |_) || | | |  | | (___                              \n";
+        cout<<"                     | |  | |  __|   | |\\/| | |  | |  _  /|  _ < | | | |  | |\\___ \\                           \n";
+        cout<<"                     | |__| | |____  | |  | | |__| | | \\ \\| |_) || |_| |__| |____) |                           \n";
+        cout<<"                     |_____/|______| |_|  |_|\\____/|_|  \\_\\____/_____|\\____/|_____/                          \n";
+        cout<<"\n\n\n\n\n\n";
+        cout<<"                              VOUS AVEZ REUSSI A PARCOURIR LE LABYRINTHE                                         \n";
+        cout<<"                            VOULEZ VOUS VOUS RENDRE AU PROCHAIN NIVEAU ? Y/N                                    \n";
+        char choix;
+        choix = getch();
+        if(choix == 'y')
+        {
+            cout<<"Pas encore de prochain niveau";
+        }
     }
-    }
-    else
-    {
-        cout << "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
-    }
-    return 0;
 }
